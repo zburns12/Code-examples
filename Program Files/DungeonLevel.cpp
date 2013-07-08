@@ -18,16 +18,14 @@ DungeonLevel::DungeonLevel(int iWidth, int iHeight, std::mt19937 & mt)
 		(*it).resize(iWidth, ' ');
 	}
 
-	// We're going to divide the level into 4x2 chunks
+	// Divide the level into 4x2 chunks
 	int iChunkWidth = iWidth / 4;
 	int iChunkHeight = iHeight / 2;
 
 
-	// The strategy here is to first draw a loop of tunnels on
+	// Draw a loop of tunnels on
 	// the level, and then draw rooms on top of them.
 
-	// Taking the easy way out, and generating
-	// a loop of tunnels first to drop rooms on to
 	for( int x = (iChunkWidth/2); x <= ((3 * iChunkWidth) + (iChunkWidth/2)); x++ )
 	{
 		m_vvTiles[iChunkHeight/2][x] = '#';
@@ -56,9 +54,9 @@ DungeonLevel::DungeonLevel(int iWidth, int iHeight, std::mt19937 & mt)
 	}
 
 
-	// So then we iterate through the chunks, and we
+	// So then iterate through the chunks, and
 	// have individual blocks of the level which don't
-	// overlap, so we're going to drop a room on each one.
+	// overlap, so drop a room on each one.
 
 	for( int iXChunk = 0; iXChunk < 4; iXChunk++ )
 	{
@@ -68,11 +66,10 @@ DungeonLevel::DungeonLevel(int iWidth, int iHeight, std::mt19937 & mt)
 		{
 			int iYStart = iYChunk * iChunkHeight;
 
-			// Ok, so here we get a bit shifty.
-			// We have 8 chunks.  We need to have 
+			// We need to have 
 			// at minimum 200 room tiles.  200/8 is
-			// 25.  sqrt(25) is 5.  So we're going
-			// to generate rooms of minimum size 5x5.
+			// 25.  sqrt(25) is 5.
+			// So generate rooms of minimum size 5x5.
 
 			int iRoomWidth = (mt() % (iChunkWidth - 5)) + 5;
 			int iRoomHeight = (mt() % (iChunkHeight - 5)) + 5;
@@ -83,8 +80,6 @@ DungeonLevel::DungeonLevel(int iWidth, int iHeight, std::mt19937 & mt)
 			int iXOffset = mt() % (iChunkWidth - iRoomWidth);
 			int iYOffset = mt() % (iChunkHeight - iRoomHeight);
 
-			// Make sure this room lines up with the pre-generated
-			// tunnels
 
 			int iTunnelY = iYStart + (iChunkHeight/2);
 
@@ -99,8 +94,7 @@ DungeonLevel::DungeonLevel(int iWidth, int iHeight, std::mt19937 & mt)
 				iYOffset = 1 + iTunnelY - (iYStart + iRoomHeight);
 			}
 
-			// And check for the X direction (although this only matters for
-			// rooms in the first or last chunk, X-wise)
+			// And check for the X direction
 
 			if( iXChunk == 0 || iXChunk == 3 )
 			{
@@ -127,7 +121,7 @@ DungeonLevel::DungeonLevel(int iWidth, int iHeight, std::mt19937 & mt)
 				}
 			}
 
-			// Check to see if we picked this room for up/down stairs, and
+			// Check to see if this room is for up/down stairs, and
 			// if so, randomly place the stairs
 
 			if( iXChunk == iUpXChunk && iYChunk == iUpYChunk )
