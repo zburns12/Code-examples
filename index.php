@@ -24,7 +24,7 @@ switch (@$_POST['Button'])
 	//where the email matches the one provided
 	$sql = "SELECT password, salt FROM tbl_users WHERE email='$login_email';";
 	$result = mysqli_query($cxn,$sql) or die("Query died: password");
-	$num = mysqli_num_rows($result); //count the number of rows the query returned	
+	$num = mysqli_num_rows($result); //count the number of rows the query returned	 
 	
 	if($num < 1) // if no rows were returned by the query then the email doesn't exist
 	{	
