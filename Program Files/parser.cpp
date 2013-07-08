@@ -1,14 +1,4 @@
 // parser.cpp
-//
-// Example XML parser -- framework for PA1 part 2 parsing
-//
-// Feel free to use for your assignment; note that
-// you will have to make some modifications to this
-// to get it to meet the requirements.
-//
-// Note that for this code example to work, you will
-// need to have a world.xml in the same directory
-// you run it from.
 
 #include <iostream>
 #include <string>
@@ -35,8 +25,6 @@ bool parseElement(istream & input, vector<XMLSerializable*> & vWorld, XMLSeriali
 	char c;
 
 	// The name of the element; initialized to
-	// an empty string (as all strings are by default);
-	// we get this by reading in the XML
 	string sElementName;
 
 
@@ -103,35 +91,19 @@ bool parseElement(istream & input, vector<XMLSerializable*> & vWorld, XMLSeriali
 	// Holds the non-element content of the element
 	string sContent;
 
-	// while(true) can be dangerous, but we do have paths
-	// out of the function.
 	while( true )
 	{
 		// Read a character off the stream
 		c = input.get();
 
-		// The important thing is to check to see if
-		// it is an open angled bracket.
 		if( c == '<' )
 		{
-			// If it is, we have two possibilities (assuming
-			// the XML is valid):
-			//
-			// Either this is the start tag for a new element
-			// contained in the current element, or it's
-			// the end tag for our current element.
-			//
-			// Note that if it is an end tag -- and the XML is
-			// valid -- it MUST be the end tag of the current element
-			// as elements are not allowed to overlap.
 
-			// So we check for the first character
+			// Check for the first character
 			// being a / -- which indicated an end tag
 			if( input.peek() == '/' )
 			{
-				// We must burn off the / since
-				// we only peeked it, and haven't
-				// gotten it yet!
+			
 				input.get();
 
 				// Variable to hold the end tag as
@@ -148,8 +120,7 @@ bool parseElement(istream & input, vector<XMLSerializable*> & vWorld, XMLSeriali
 
 				} while( c != '>' );
 
-				// Now, we test for the validity of the XML -- the 
-				// end tag's name must match the element's name...
+				//  the end tag's name must match the element's name...
 				if( sEndTag != sElementName )
 				{
 					cout << "Tag name mismatch" << endl;
@@ -161,8 +132,7 @@ bool parseElement(istream & input, vector<XMLSerializable*> & vWorld, XMLSeriali
 					pObject->setElementData(sElementName, sContent);
 				}
 
-				// And since we have fully parsed an element, we
-				// return to whatever called us in the first place
+				
 				return true;
 
 			}
@@ -172,23 +142,14 @@ bool parseElement(istream & input, vector<XMLSerializable*> & vWorld, XMLSeriali
 				// but it was NOT an end tag -- the input file
 				// is currently positioned on the first character
 				// after the opening <, so we can call parseElement
-				// on it...
-				//
-				// Here we're passing the hierarchy we know plus
-				// the current element name, so this next element
-				// knows where it is in the overal document 
-				// hiearchy
+				// on it
+				
 				if( !parseElement(input, vWorld, pObject) )
 					return false;
 			}
 		}
 		else
 		{
-			// In this branch, we have read in a character inside
-			// the element which is not a < -- since it's not
-			// part of an interior element, it's content, so
-			// we add it to our variable which stores the
-			// content (ignoring end-of-line characters).
 			if( c != '\n' )
 				sContent.push_back(c);
 		}
@@ -198,10 +159,8 @@ bool parseElement(istream & input, vector<XMLSerializable*> & vWorld, XMLSeriali
 	return true;
 }
 
-// parseXML -- parses an XML document.  First it
-// makes a very half-hearted check for the validity
-// of the XML header, then it parses the root
-// element of the document.
+// parseXML -- parses an XML document.  
+
 bool parseXML(istream & input, vector<XMLSerializable*> & vWorld)
 {
 	char c;
@@ -214,7 +173,7 @@ bool parseXML(istream & input, vector<XMLSerializable*> & vWorld)
 	} while( c != '<' );
 
 	// Check the character after the < -- if it's
-	// not a ?, we aren't seeing a valid XML header
+	// not a ?, not a valid XML header
 	if( input.get() != '?' )
 	{
 		cout << "Invalid XML header" << endl;
@@ -228,7 +187,7 @@ bool parseXML(istream & input, vector<XMLSerializable*> & vWorld)
 		c = input.get();
 	} while( c != '?' );
 
-	// Then we check for a > -- which tests for
+	// Then check for a > -- which tests for
 	// the header ending with ?>
 	if( input.get() != '>' )
 	{
@@ -236,7 +195,7 @@ bool parseXML(istream & input, vector<XMLSerializable*> & vWorld)
 		return false;
 	}
 
-	// Now burn off characters until we get to the first
+	// Now burn off characters until the first
 	// tag after the XML header...
 	do
 	{
@@ -244,8 +203,8 @@ bool parseXML(istream & input, vector<XMLSerializable*> & vWorld)
 	} while( c != '<' );
 
 
-	// And so, we're now on the first character after
-	// the opening < -- which is exactly what parseElement
-	// expects.  So we call it.
+	// Now on the first character after
+	// the opening < -- call parseElement 
+	
 	return parseElement(input, vWorld, NULL);
 }
