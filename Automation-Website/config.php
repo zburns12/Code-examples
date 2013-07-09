@@ -1,5 +1,5 @@
 <?php
-	//set MySQL database parameters
+	//set MySQL database parameters 
 	$user = "homelogic";
 	$host = "localhost";
 	$password = "homelogic";
