@@ -1,6 +1,6 @@
 <?php
 
-session_start();//start the session
+session_start();//start the session 
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 600)) {
     // last request was more than 10 minutes ago
