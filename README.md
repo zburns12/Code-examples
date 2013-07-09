@@ -1,4 +1,4 @@
-PHP-code-examples
+Code-examples
 =================
 
-Various PHP code 
+Various code examples 
